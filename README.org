@@ -1,0 +1,42 @@
+#+TITLE: no-spam.el
+#+AUTHOR: Daniel Phan
+
+~no-spam.el~ allows adding repeat delays to commands. This annoyance
+can help if you're trying to stop spamming certain ones, like the
+~hjkl~ keys in ~evil~.
+
+To add a delay, use the macro ~no-spam-add-repeat-delay~. It takes
+three arguments:
+- ~command~ is the command to add a repeat delay to. It can be a
+  single command or a list of commands. In the second case, the
+  commands all share the delay (i.e. if you execute one of them and
+  then execute a different one, the delay still applies).
+- ~time~ (optional) is the delay to use, in seconds. It defaults to
+  ~no-spam-default-repeat-delay~.
+- ~except~ (optional) is a zero-argument function that should return
+  non-nil if the repeat delay should be bypassed. It defaults to
+  ~no-spam-default-exception~.
+
+After setting desired repeat delays, enable ~no-spam-mode~ to have
+them take effect.
+
+Here's an example:
+
+#+BEGIN_SRC emacs-lisp
+  (require 'no-spam)
+
+  ;; Use default parameter values.
+  (no-spam-add-repeat-delay next-line)
+
+  ;; Set a 10-second repeat delay for `forward-char'.
+  (no-spam-add-repeat-delay forward-char 10)
+
+  ;; Have the delay not apply in the minibuffer.
+  (no-spam-add-repeat-delay backward-char nil minibufferp)
+
+  ;; Have `forward-paragraph' and `backward-paragraph' share a delay.
+  (no-spam-add-repeat-delay (forward-paragraph backward-paragraph))
+
+  ;; Enable the repeat delays.
+  (no-spam-mode)
+#+END_SRC
