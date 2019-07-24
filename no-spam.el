@@ -104,7 +104,7 @@ repeat delay should be bypassed.  EXCEPT defaults to
           ((not (called-interactively-p))
            (apply ,orig-fn-var ,args-var))
           ((,except)
-           (call-interactively ,orig-fn-var)
+           (apply ,orig-fn-var ,args-var)
            ;; Reset the delays, or a wrong last time will be used.
            (setq no-spam--last-time nil))
           (t
@@ -112,7 +112,7 @@ repeat delay should be bypassed.  EXCEPT defaults to
              (unless (and no-spam--last-time
                           (< (- ,time-var no-spam--last-time) ,delay)
                           (memq real-last-command ',commands))
-               (call-interactively ,orig-fn-var)
+               (apply ,orig-fn-var ,args-var)
                (setq no-spam--last-time ,time-var))))))
        (dolist (,cmd-var ',commands)
          (no-spam--register-advice ,cmd-var #',advice-fn)))))
